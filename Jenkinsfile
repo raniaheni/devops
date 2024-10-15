@@ -27,6 +27,15 @@ pipeline {
                 }
             }
         }
+        stage('Test') {
+            steps {
+                dir('') {
+                    sh 'chmod +x mvnw'
+                    // Exécuter les tests en utilisant H2
+                    sh './mvnw test -Dspring.profiles.active=test'
+                }
+            }
+        }
     }
 
     post {
