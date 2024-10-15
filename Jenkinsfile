@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'M2_HOME'
+        jdk 'JAVA_HOME'
+    }
+
+    environment {
+        // Allocate a maximum of 1024 MB (1 GB) of heap memory.
+        MAVEN_OPTS = '-Xmx1024m'
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                git url: 'https://github.com/raniaheni/devops.git',
+                    branch: 'kaissGH',
+                    credentialsId: 'kaiss'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            mail to: 'kun.elghoul@gmail.com',
+                 subject: "Jenkins Build Successful: ${env.JOB_NAME}",
+                 body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} was successful. Check Jenkins for details."
+            echo 'Build successful !'
+        }
+        failure {
+            mail to: 'kun.elghoul@gmail.com',
+                 subject: "Jenkins Build Failed: ${env.JOB_NAME}",
+                 body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} failed. Check Jenkins for details."
+            echo 'Build failed'
+        }
+    }
+}
