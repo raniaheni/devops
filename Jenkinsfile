@@ -16,7 +16,7 @@ pipeline {
             steps {
                 git url: 'https://github.com/raniaheni/devops.git',
                     branch: 'kaissGH',
-                    credentialsId: 'kaiss'
+                    credentialsId: 'kais'
             }
         }
 
