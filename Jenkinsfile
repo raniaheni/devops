@@ -27,7 +27,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t kaissgh_docker/foyer:latest .'
+                sh 'docker build -t kaissgh11/foyer:latest .'
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
                     // Login to DockerHub using credentials
                     withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'docker push kaissgh_docker/foyer:latest'
+                        sh 'docker push kaissgh11/foyer:latest'
                     }
                 }
             }
