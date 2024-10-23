@@ -46,15 +46,31 @@ pipeline {
 
     post {
         success {
-            mail to: 'kun.elghoul@gmail.com',
-                 subject: "Jenkins Build Successful: ${env.JOB_NAME}",
-                 body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} was successful. Check Jenkins for details."
+            emailext (
+                to: 'kun.elghoul@gmail.com',
+                subject: "Jenkins Build Successful: ${env.JOB_NAME}",
+                body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} was successful. Check Jenkins for details.",
+                from: 'kun.elghoul@gmail.com',
+                replyTo: 'kun.elghoul@gmail.com',
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: '587',
+                mimeType: 'text/plain',
+                credentialsId: 'gh11'  // Utilisez l'ID des identifiants pour votre Gmail
+            )
             echo 'Build successful!'
         }
         failure {
-            mail to: 'kun.elghoul@gmail.com',
-                 subject: "Jenkins Build Failed: ${env.JOB_NAME}",
-                 body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} failed. Check Jenkins for details."
+            emailext (
+                to: 'kun.elghoul@gmail.com',
+                subject: "Jenkins Build Failed: ${env.JOB_NAME}",
+                body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} failed. Check Jenkins for details.",
+                from: 'kun.elghoul@gmail.com',
+                replyTo: 'kun.elghoul@gmail.com',
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: '587',
+                mimeType: 'text/plain',
+                credentialsId: 'gh11'  // Utilisez l'ID des identifiants pour votre Gmail
+            )
             echo 'Build failed'
         }
     }
