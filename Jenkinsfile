@@ -8,7 +8,6 @@ pipeline {
 
     environment {
         MAVEN_OPTS = '-Xmx1024m'
-        DOCKER_CREDENTIALS = credentials('dockerhub_credentials_id') // Store Docker credentials in Jenkins
     }
 
     stages {
@@ -35,9 +34,11 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    // Login to DockerHub
-                    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-                    sh 'docker push kaissgh_docker/foyer:latest'
+                    // Login to DockerHub using credentials
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials_id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+                        sh 'docker push kaissgh_docker/foyer:latest'
+                    }
                 }
             }
         }
