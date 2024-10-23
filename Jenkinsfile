@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        // Allocate a maximum of 1024 MB (1 GB) of heap memory.
         MAVEN_OPTS = '-Xmx1024m'
+        DOCKER_CREDENTIALS = credentials('dockerhub_credentials_id') // Store Docker credentials in Jenkins
     }
 
     stages {
@@ -22,33 +22,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('') {
-                    sh 'mvn clean package'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'chmod +x mvnw'
-                // Exécuter les tests en utilisant H2
-                sh './mvnw test -Dspring.profiles.active=test'
+                sh 'mvn clean package'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Remplacez votre_nom_utilisateur_docker par votre nom d'utilisateur Docker Hub
-                    sh 'docker build -t kaissgh_docker/foyer:latest .'
-                }
+                sh 'docker build -t kaissgh_docker/foyer:latest .'
             }
         }
 
         stage('Push to DockerHub') {
             steps {
                 script {
-                    // Remplacez votre_nom_utilisateur_docker par votre nom d'utilisateur Docker Hub
+                    // Login to DockerHub
+                    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
                     sh 'docker push kaissgh_docker/foyer:latest'
                 }
             }
@@ -60,7 +48,7 @@ pipeline {
             mail to: 'kun.elghoul@gmail.com',
                  subject: "Jenkins Build Successful: ${env.JOB_NAME}",
                  body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} was successful. Check Jenkins for details."
-            echo 'Build successful !'
+            echo 'Build successful!'
         }
         failure {
             mail to: 'kun.elghoul@gmail.com',
