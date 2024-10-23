@@ -27,12 +27,30 @@ pipeline {
                 }
             }
         }
+
         stage('Test') {
             steps {
-                    sh 'chmod +x mvnw'
-                    // Exécuter les tests en utilisant H2
-                    sh './mvnw test -Dspring.profiles.active=test'
-                
+                sh 'chmod +x mvnw'
+                // Exécuter les tests en utilisant H2
+                sh './mvnw test -Dspring.profiles.active=test'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Remplacez votre_nom_utilisateur_docker par votre nom d'utilisateur Docker Hub
+                    sh 'docker build -t kaissgh_docker/foyer:latest .'
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                script {
+                    // Remplacez votre_nom_utilisateur_docker par votre nom d'utilisateur Docker Hub
+                    sh 'docker push kaissgh_docker/foyer:latest'
+                }
             }
         }
     }
@@ -52,3 +70,4 @@ pipeline {
         }
     }
 }
+
