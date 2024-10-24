@@ -25,6 +25,23 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'SonarQube Scanner'
+            }
+            steps {
+                withSonarQubeEnv('SonarQube Server') { // Use the name configured in Jenkins for SonarQube
+                    sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=your_project_key \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=${SONAR_AUTH_TOKEN}
+                    """
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t kaissgh11/foyer:latest .'
@@ -34,7 +51,6 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    // Login to DockerHub using credentials
                     withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
                         sh 'docker push kaissgh11/foyer:latest'
