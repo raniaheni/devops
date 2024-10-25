@@ -4,6 +4,7 @@ pipeline {
     tools {
         maven 'M2_HOME'
         jdk 'JAVA_HOME'
+        sonarQubeScanner 'SonarQube Scanner' // Add SonarQube scanner
     }
 
     environment {
@@ -25,23 +26,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'SonarQube Scanner'
-            }
-            steps {
-                withSonarQubeEnv('SonarQube Server') { // Use the name configured in Jenkins for SonarQube
-                    sh """
-                        ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=your_project_key \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=${SONAR_AUTH_TOKEN}
-                    """
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t kaissgh11/foyer:latest .'
@@ -58,6 +42,17 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'SonarQube Scanner'
+            }
+            steps {
+                withSonarQubeEnv('SonarQube Server') {
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=your_project_key -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${SONAR_AUTH_TOKEN}"
+                }
+            }
+        }
     }
 
     post {
@@ -68,23 +63,5 @@ pipeline {
                 body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} was successful. Check Jenkins for details.",
                 mimeType: 'text/plain',
                 from: 'kun.elghoul@gmail.com',
-                replyTo: 'kun.elghoul@gmail.com',
-                attachLog: true
-            )
-            echo 'Build successful!'
-        }
-        failure {
-            emailext (
-                to: 'kun.elghoul@gmail.com',
-                subject: "Jenkins Build Failed: ${env.JOB_NAME}",
-                body: "Build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} failed. Check Jenkins for details.",
-                mimeType: 'text/plain',
-                from: 'kun.elghoul@gmail.com',
-                replyTo: 'kun.elghoul@gmail.com',
-                attachLog: true
-            )
-            echo 'Build failed'
-        }
-    }
-}
+                replyTo: 'kun.elghoul@gmail.com
 
