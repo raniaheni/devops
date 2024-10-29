@@ -21,8 +21,7 @@ import java.util.Optional;
 
 
 @ExtendWith(MockitoExtension.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(classes = FoyerApplication.class)
+
 class UniversiteServiceMockitoTest {
     @InjectMocks
     private UniversiteService universiteService;
@@ -47,7 +46,6 @@ class UniversiteServiceMockitoTest {
     }
 
     @Test
-    @Order(1)
     public void TestaddOrUpdate() {
 
         Mockito.when(universiteRepository.save(Mockito.any(Universite.class)))
@@ -60,13 +58,11 @@ class UniversiteServiceMockitoTest {
     }
 
     @Test
-    @Order(3)
     public void TestfindAll() {
         universiteService.findAll();
     }
 
     @Test
-    @Order(2)
     public void TestfindById() {
         Mockito.when(universiteRepository.save(Mockito.any(Universite.class)))
                 .thenReturn(u);
@@ -82,13 +78,11 @@ class UniversiteServiceMockitoTest {
     }
 
     @Test
-    @Order(4)
     public void TestdeleteById() {
         universiteService.deleteById(this.u.getIdUniversite());
     }
 
     @Test
-    @Order(5)
     public void Testdelete() {
         universiteService.delete(this.u);
     }
