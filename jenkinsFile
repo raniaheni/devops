@@ -23,16 +23,22 @@ pipeline {
                 sh 'mvn clean'
             }
         }
-        stage('creation de livrable') {
+        stage('project compile') {
             steps {
-                sh 'mvn package'
+                sh 'mvn compile'
             }
         }
+        
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
                 }
+            }
+        }
+        stage('creation de livrable') {
+            steps {
+                sh 'mvn package'
             }
         }
         stage('Tests unitaires') {
