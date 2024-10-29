@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+    stages {
+        stage('welcome') {
+            steps {
+                echo 'hello'
+            }
+        }
+        
+        stage('test maven') {
+            steps {
+                sh 'mvn -version'
+            }
+        }
+        
+        stage('Checkout Git') {
+            steps {
+                echo 'pluggins ...'
+                git branch: 'manelWALHA-5SAE1-G2', url: 'https://github.com/raniaheni/devops.git',credentialsId: '8b2286e4-a399-418c-a7e3-6c55da5e1a57' 
+            }
+        }
+        stage('Clean Project') {
+            steps {
+                sh 'mvn clean'
+            }
+        }
+        stage('Tests unitaires') {
+            steps {
+                sh 'mvn test -Dtest=tn.esprit.springTest.UniversiteServiceMockitoTest'
+            }
+        }
+        stage('creation de livrable') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                sh './mvnw sonar:sonar ' +
+                   '-Dsonar.projectKey=your_project_key ' +
+                   '-Dsonar.host.url=$SONAR_HOST_URL ' +
+                   '-Dsonar.login=$SONAR_LOGIN'
+            }
+        }
+        
+        stage('Pull from Docker Hub') {
+            steps {
+                sh "docker pull walhamanel/alpine:1.0.0"
+            }
+        }
+        
+        
+    }
+}
