@@ -28,11 +28,16 @@ pipeline {
                 sh 'mvn compile'
             }
         }
+        stage('creation de livrable') {
+            steps {
+                sh 'mvn package'
+            }
+        }
         
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target/classes'
+                    sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar '
                 }
             }
         }
