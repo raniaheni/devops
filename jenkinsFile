@@ -18,21 +18,13 @@ pipeline {
                 git branch: 'manelWALHA-5SAE1-G2', url: 'https://github.com/raniaheni/devops.git',credentialsId: '8b2286e4-a399-418c-a7e3-6c55da5e1a57' 
             }
         }
-        stage('Clean Project') {
-            steps {
-                sh 'mvn clean'
-            }
-        }
+       
         stage('project compile') {
             steps {
                 sh 'mvn compile'
             }
         }
-        stage('creation de livrable') {
-            steps {
-                sh 'mvn package'
-            }
-        }
+        
         
         stage('SonarQube Analysis') {
             steps {
