@@ -24,11 +24,6 @@ pipeline {
                 sh 'mvn clean'
             }
         }
-        stage('Tests unitaires') {
-            steps {
-                sh 'mvn test -Dtest=tn.esprit.springTest.UniversiteServiceMockitoTest'
-            }
-        }
         stage('creation de livrable') {
             steps {
                 sh 'mvn package'
@@ -40,6 +35,12 @@ pipeline {
                 sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
             }
         }
+        stage('Tests unitaires') {
+            steps {
+                sh 'mvn test -Dtest=tn.esprit.springTest.UniversiteServiceMockitoTest'
+            }
+        }
+        
         
         stage('Pull from Docker Hub') {
             steps {
