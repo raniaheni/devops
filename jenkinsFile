@@ -31,8 +31,9 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv(installationNameStr:'SonarQube'))
+                withSonarQubeEnv(installationNameStr:'SonarQube') {
                 sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+                }
             }
         }
         stage('Tests unitaires') {
