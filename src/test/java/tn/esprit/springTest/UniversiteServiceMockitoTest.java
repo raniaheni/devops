@@ -58,8 +58,8 @@ class UniversiteServiceMockitoTest {
     }
 
     @Test
-    public void TestfindAll() {
-        universiteService.findAll();
+    public void testfindAll() {
+        this.universiteService.findAll();
     }
 
     @Test
