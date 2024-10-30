@@ -30,7 +30,16 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target '
+                     // Update existing sonar-project.properties
+                    sh '''
+                    echo "sonar.projectKey=tn.esprit.spring:Foyer" >> sonar-project.properties
+                    echo "sonar.java.coveragePlugin=jacoco" >> sonar-project.properties
+                    echo "sonar.jacoco.reportPaths=target/jacoco.exec" >> sonar-project.properties
+                    '''
+
+                    // Run SonarQube analysis
+                    sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.java.binaries=target'
+                
                 }
             }
         }
