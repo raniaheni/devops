@@ -38,7 +38,7 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv('SonarQube Server') { // Ensure this matches the name in Jenkins configuration
-                    withCredentials([string(credentialsId: 'sq12', variable: 'SONAR_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'sc12', variable: 'SONAR_TOKEN')]) {
                         sh """
                         ${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=your_project_key \
