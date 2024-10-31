@@ -41,6 +41,16 @@ pipeline {
             }
         }
 
+        stage('Code Coverage Report') {
+            steps {
+                jacoco execPattern: '**/target/jacoco.exec', 
+                       classPattern: '**/target/classes', 
+                       sourcePattern: '**/src/main/java', 
+                       exclusionPattern: '**/target/test-classes/**',
+                       inclusionPattern: '**/*.class'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t kaissgh11/foyer:latest .'
