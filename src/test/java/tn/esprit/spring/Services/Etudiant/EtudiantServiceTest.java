@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import tn.esprit.spring.DAO.Entities.Etudiant;
-import tn.esprit.spring.DAO.Entities.Reservation;
 import tn.esprit.spring.DAO.Repositories.EtudiantRepository;
 
 import java.time.LocalDate;
@@ -23,7 +22,7 @@ class EtudiantRepositoryTest {
 
     @BeforeEach
     void setup() {
-        // Initialize a new Etudiant entity
+        // Initialize a new Etudiant entity with valid data
         etudiant = Etudiant.builder()
                 .nomEt("John")
                 .prenomEt("Doe")
@@ -38,6 +37,8 @@ class EtudiantRepositoryTest {
         // Test saving the entity
         Etudiant savedEtudiant = etudiantRepository.save(etudiant);
 
+        // Assertions to verify saving was successful
+        assertThat(savedEtudiant).isNotNull();
         assertThat(savedEtudiant.getIdEtudiant()).isNotNull();
         assertThat(savedEtudiant.getNomEt()).isEqualTo("John");
         assertThat(savedEtudiant.getPrenomEt()).isEqualTo("Doe");
@@ -84,10 +85,18 @@ class EtudiantRepositoryTest {
     void testFindAll() {
         // Save multiple Etudiant entities
         etudiantRepository.save(etudiant);
-        etudiantRepository.save(Etudiant.builder().nomEt("Alice").prenomEt("Wonder").cin(98765432L).ecole("UML").dateNaissance(LocalDate.of(1998, 3, 15)).build());
+        etudiantRepository.save(Etudiant.builder()
+                .nomEt("Alice")
+                .prenomEt("Wonder")
+                .cin(98765432L)
+                .ecole("UML")
+                .dateNaissance(LocalDate.of(1998, 3, 15))
+                .build());
 
         List<Etudiant> etudiants = etudiantRepository.findAll();
 
+        // Verify that the findAll method returns the correct number of records
         assertThat(etudiants).hasSize(2);
     }
 }
+

@@ -25,6 +25,13 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                // Exécution des tests et génération de jacoco.exec
+                sh 'mvn clean test'
+            }
+        }
+        
         stage('SonarQube Analysis') {
             environment {
                 scannerHome = tool 'SonarQube Scanner'
@@ -36,10 +43,13 @@ pipeline {
                        "-Dsonar.sources=. " +
                        "-Dsonar.java.binaries=target/classes " + // Specify the compiled classes directory
                        "-Dsonar.host.url=http://localhost:9000 " +
-                       "-Dsonar.login=${SONAR_AUTH_TOKEN}"
+                       "-Dsonar.login=${SONAR_AUTH_TOKEN}" +
+                       "-Dsonar.javascript.node.maxBridgeTimeout=600" // Increase timeout
                 }
             }
         }
+        
+        
 
         stage('Code Coverage Report') {
             steps {
