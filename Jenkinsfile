@@ -27,29 +27,31 @@ pipeline {
 
         stage('Test') {
             steps {
-                // Exécution des tests et génération de jacoco.exec
+                // Execute tests and generate jacoco.exec
                 sh 'mvn clean test'
             }
         }
-        
+
         stage('SonarQube Analysis') {
             environment {
                 scannerHome = tool 'SonarQube Scanner'
             }
             steps {
                 withSonarQubeEnv('SonarQube Server') { // Ensure this matches the name in Jenkins configuration
-                    sh "${scannerHome}/bin/sonar-scanner " +
-                       "-Dsonar.projectKey=your_project_key " +
-                       "-Dsonar.sources=. " +
-                       "-Dsonar.java.binaries=target/classes " + // Specify the compiled classes directory
-                       "-Dsonar.host.url=http://localhost:9000 " +
-                       "-Dsonar.login=${SONAR_AUTH_TOKEN}" +
-                       "-Dsonar.javascript.node.maxBridgeTimeout=600" // Increase timeout
+                    withCredentials([string(credentialsId: 'sq12', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=your_project_key \
+                        -Dsonar.sources=. \
+                        -Dsonar.java.binaries=target/classes \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=$SONAR_TOKEN \
+                        -Dsonar.javascript.node.maxBridgeTimeout=600
+                        """
+                    }
                 }
             }
         }
-        
-        
 
         stage('Code Coverage Report') {
             steps {
