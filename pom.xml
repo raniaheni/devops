@@ -88,6 +88,13 @@
                     </excludes>
                 </configuration>
             </plugin>
+                 <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <altDeploymentRepository>deploymentRepo::default::http://92.168.50.4:8081/repository/maven-releases/</altDeploymentRepository>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
