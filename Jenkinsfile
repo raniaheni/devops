@@ -20,6 +20,22 @@ pipeline {
         }
         
         
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+                sh 'ls -l target/'  // Check if the jar file exists
+            }
+        }
+        
+       stage('Test') {
+            steps {
+                // Execute tests and generate jacoco.exec
+                sh 'mvn clean test'
+            }
+        }
+
+        
+        
         stage('SonarQube Analysis') {
             environment {
                 scannerHome = tool 'SonarQube Scanner'
