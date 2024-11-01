@@ -22,6 +22,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn clean package'
+                sh 'ls -l target/'  // Check if the jar file exists
             }
         }
 
@@ -65,7 +66,14 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t kaissgh11/foyer:latest .'
+                script {
+                    // Check if the .jar file exists before building the Docker image
+                    if (fileExists('target/*.jar')) {
+                        sh 'docker build -t kaissgh11/foyer:latest .'
+                    } else {
+                        error "Jar file not found. Docker build aborted."
+                    }
+                }
             }
         }
 
