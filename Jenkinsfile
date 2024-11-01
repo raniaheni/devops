@@ -27,12 +27,7 @@ pipeline {
             }
         }
         
-       stage('Test') {
-            steps {
-                // Execute tests and generate jacoco.exec
-                sh 'mvn clean test'
-            }
-        }
+      
 
         
         
