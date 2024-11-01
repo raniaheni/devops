@@ -8,6 +8,13 @@ pipeline {
 
     environment {
         MAVEN_OPTS = '-Xmx1024m'
+        // Nexus configuration
+        NEXUS_URL = 'http://localhost:8081/repository/maven-releases/'
+        NEXUS_CREDENTIALS_ID = 'nexus_credentials_id' // Define in Jenkins credentials
+        NEXUS_GROUP_ID = 'tn.esprit'
+        NEXUS_ARTIFACT_ID = 'DevOps_Project'
+        NEXUS_VERSION = '1.0'
+        NEXUS_REPO = 'maven-releases' // Adjust to your Nexus repository
     }
 
     stages {
@@ -22,49 +29,20 @@ pipeline {
        
         
 
-         stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'SonarQube Scanner'
-            }
-            steps {
-                withSonarQubeEnv('SonarQube Server') { // Ensure this matches the name in Jenkins configuration
-                    sh "${scannerHome}/bin/sonar-scanner " +
-                       "-Dsonar.projectKey=ddf " +
-                       "-Dsonar.sources=. " +
-                       "-Dsonar.java.binaries=target/classes " + // Specify the compiled classes directory
-                       "-Dsonar.host.url=http://localhost:9000 " +
-                       "-Dsonar.login=${SONAR_AUTH_TOKEN}"
-                }
-            }
-        }
-
-        stage('Code Coverage Report') {
-            steps {
-                jacoco execPattern: '**/target/jacoco.exec', 
-                       classPattern: '**/target/classes', 
-                       sourcePattern: '**/src/main/java', 
-                       exclusionPattern: '**/target/test-classes/**',
-                       inclusionPattern: '**/*.class'
-            }
-        }
-        
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t kaissgh11/foyer:latest .'
-            }
-        }
-
-        stage('Push to DockerHub') {
+         stage('Publish to Nexus') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'docker push kaissgh11/foyer:latest'
+                    echo "Publishing ${env.jarFileName} to Nexus"
+                    withCredentials([usernamePassword(credentialsId: "${env.NEXUS_CREDENTIALS_ID}", passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
+                        sh """
+                        curl -v -u ${NEXUS_USER}:${NEXUS_PASS} \
+                        --upload-file ${env.SPRING_BOOT_PROJECT_NAME}/${env.jarFileName} \
+                        "${env.NEXUS_URL}/${env.NEXUS_GROUP_ID}/${env.NEXUS_ARTIFACT_ID}/${env.NEXUS_VERSION}/${env.NEXUS_ARTIFACT_ID}-${env.NEXUS_VERSION}.jar"
+                        """
                     }
                 }
             }
         }
-        
 
        
 
