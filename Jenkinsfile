@@ -65,21 +65,24 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t kaissgh11/foyer:latest .'
-            }
+        sh 'docker build -t kaissgh11/foyer:latest .'
+                 }
         }
 
         stage('Push to DockerHub') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'docker push kaissgh11/foyer:latest'
-                    }
-                }
+           steps {
+            script {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                sh '''
+                    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                    docker push kaissgh11/foyer:latest
+                    docker logout
+                '''
             }
         }
     }
+}
+
 
     post {
         success {
