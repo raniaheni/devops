@@ -19,12 +19,7 @@ pipeline {
             }
         }
         
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
-
+       
         
 
          stage('SonarQube Analysis') {
@@ -52,33 +47,10 @@ pipeline {
                        inclusionPattern: '**/*.class'
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t kaissgh11/foyer:latest .'
-            }
-        }
-
-        stage('Push to DockerHub') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'docker push kaissgh11/foyer:latest'
-                    }
-                }
-            }
-        }
         
        
 
-        stage('Deploy to Nexus') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                    sh 'mvn clean deploy -DaltDeploymentRepository=nexus::default::http://localhost:8081/repository/maven-releases/ ' +
-                       '-Dnexus.username=$NEXUS_USERNAME -Dnexus.password=$NEXUS_PASSWORD'
-                }
-            }
-        }
+       
     
     }
 
