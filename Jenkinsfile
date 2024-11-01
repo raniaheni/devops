@@ -9,6 +9,7 @@ pipeline {
     environment {
         MAVEN_OPTS = '-Xmx1024m'
         // Nexus configuration
+        def artifactPath = 'target/Foyer-0.0.1-SNAPSHOT.jar'
         NEXUS_URL = 'http://localhost:8081/repository/maven-releases/'
         NEXUS_CREDENTIALS_ID = 'nexus_credentials_id' // Define in Jenkins credentials
         NEXUS_GROUP_ID = 'tn.esprit'
