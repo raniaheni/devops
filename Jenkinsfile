@@ -27,8 +27,49 @@ pipeline {
             }
         }
         
-       
         
+         stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'SonarQube Scanner'
+            }
+            steps {
+                withSonarQubeEnv('SonarQube Server') { // Ensure this matches the name in Jenkins configuration
+                    sh "${scannerHome}/bin/sonar-scanner " +
+                       "-Dsonar.projectKey=ddf " +
+                       "-Dsonar.sources=. " +
+                       "-Dsonar.java.binaries=target/classes " + // Specify the compiled classes directory
+                       "-Dsonar.host.url=http://localhost:9000 " +
+                       "-Dsonar.login=${SONAR_AUTH_TOKEN}"
+                }
+            }
+        }
+
+        stage('Code Coverage Report') {
+            steps {
+                jacoco execPattern: '**/target/jacoco.exec', 
+                       classPattern: '**/target/classes', 
+                       sourcePattern: '**/src/main/java', 
+                       exclusionPattern: '**/target/test-classes/**',
+                       inclusionPattern: '**/*.class'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t kaissgh11/foyer:latest .'
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+                        sh 'docker push kaissgh11/foyer:latest'
+                    }
+                }
+            }
+        } 
 
 	stage('Publish to Nexus') {
 	    steps {
