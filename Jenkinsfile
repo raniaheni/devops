@@ -53,14 +53,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Check if the .jar file exists before building the Docker image
-                    if (fileExists('target/*.jar')) {
-                        sh 'docker build -t kaissgh11/foyer:latest .'
-                    } else {
-                        error "Jar file not found. Docker build aborted."
-                    }
-                }
+                sh 'docker build -t kaissgh11/foyer:latest .'
             }
         }
 
@@ -68,11 +61,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh '''
-                            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                            docker push kaissgh11/foyer:latest
-                            docker logout
-                        '''
+                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+                        sh 'docker push kaissgh11/foyer:latest'
                     }
                 }
             }
