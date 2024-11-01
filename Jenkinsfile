@@ -27,23 +27,18 @@ pipeline {
 
         
 
-        stage('SonarQube Analysis') {
+         stage('SonarQube Analysis') {
             environment {
                 scannerHome = tool 'SonarQube Scanner'
             }
             steps {
                 withSonarQubeEnv('SonarQube Server') { // Ensure this matches the name in Jenkins configuration
-                    withCredentials([string(credentialsId: 'sonarqube12', variable: 'SONAR_TOKEN')]) {
-                        sh """
-                        ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=78 \
-                        -Dsonar.sources=. \
-                        -Dsonar.java.binaries=target/classes \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=$SONAR_TOKEN \
-                        -Dsonar.javascript.node.maxBridgeTimeout=600
-                        """
-                    }
+                    sh "${scannerHome}/bin/sonar-scanner " +
+                       "-Dsonar.projectKey=ddf " +
+                       "-Dsonar.sources=. " +
+                       "-Dsonar.java.binaries=target/classes " + // Specify the compiled classes directory
+                       "-Dsonar.host.url=http://localhost:9000 " +
+                       "-Dsonar.login=${SONAR_AUTH_TOKEN}"
                 }
             }
         }
@@ -57,7 +52,6 @@ pipeline {
                        inclusionPattern: '**/*.class'
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t kaissgh11/foyer:latest .'
