@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: foyer1
+    ports:
+      - "3308:3307"  # Changed to expose MySQL on port 3307
+    networks:
+      - app-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  springboot:
+    image: kaissgh11/foyer  # Corrected image name
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3307/foyer1?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123
+    depends_on:
+      - mysql
+    ports:
+      - "8087:8082"  # Map the internal port 8082 to the same external port
+    networks:
+      - app-network
+
+  sonarqube:
+    image: sonarqube:latest
+    ports:
+      - "9001:9000"
+    networks:
+      - app-network
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+  nexus:
+    image: sonatype/nexus3
+    ports:
+      - "8089:8081"
+    networks:
+      - app-network
+    volumes:
+      - nexus_data:/nexus-data
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  nexus_data:
+
