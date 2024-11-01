@@ -78,6 +78,19 @@ pipeline {
                 }
             }
         }
+        
+          
+        
+
+        stage('Deploy to Nexus') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    sh 'mvn clean deploy -DaltDeploymentRepository=nexus::default::http://localhost:8081/repository/maven-releases/ ' +
+                       '-Dnexus.username=$NEXUS_USERNAME -Dnexus.password=$NEXUS_PASSWORD'
+                }
+            }
+        }
+    
     }
 
     post {
