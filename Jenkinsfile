@@ -20,67 +20,7 @@ pipeline {
         }
         
         
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
-                sh 'ls -l target/'  // Check if the jar file exists
-            }
-        }
-        
-      
-
-        
-        
-        stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'SonarQube Scanner'
-            }
-            steps {
-                withSonarQubeEnv('SonarQube Server') { // Ensure this matches the name in Jenkins configuration
-                    withCredentials([string(credentialsId: 'sonarqube12', variable: 'SONAR_TOKEN')]) {
-                        sh """
-                        ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=foyer \
-                        -Dsonar.sources=. \
-                        -Dsonar.java.binaries=target/classes \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=$SONAR_TOKEN \
-                        -Dsonar.javascript.node.maxBridgeTimeout=600
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('Code Coverage Report') {
-            steps {
-                jacoco execPattern: '**/target/jacoco.exec', 
-                       classPattern: '**/target/classes', 
-                       sourcePattern: '**/src/main/java', 
-                       exclusionPattern: '**/target/test-classes/**',
-                       inclusionPattern: '**/*.class'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t kaissgh11/foyer:latest .'
-            }
-        }
-
-        stage('Push to DockerHub') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub12', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'docker push kaissgh11/foyer:latest'
-                    }
-                }
-            }
-        }
-        
-          
-        
+       
 
         stage('Deploy to Nexus') {
             steps {
