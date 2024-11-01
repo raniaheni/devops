@@ -30,20 +30,21 @@ pipeline {
        
         
 
-         stage('Publish to Nexus') {
-            steps {
-                script {
-                    echo "Publishing ${env.jarFileName} to Nexus"
-                    withCredentials([usernamePassword(credentialsId: "${env.NEXUS_CREDENTIALS_ID}", passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
-                        sh """
-                        curl -v -u ${NEXUS_USER}:${NEXUS_PASS} \
-                        --upload-file ${env.SPRING_BOOT_PROJECT_NAME}/${env.jarFileName} \
-                        "${env.NEXUS_URL}/${env.NEXUS_GROUP_ID}/${env.NEXUS_ARTIFACT_ID}/${env.NEXUS_VERSION}/${env.NEXUS_ARTIFACT_ID}-${env.NEXUS_VERSION}.jar"
-                        """
-                    }
-                }
-            }
-        }
+	stage('Publish to Nexus') {
+	    steps {
+		script {
+		    echo "Publishing target/Foyer-0.0.1-SNAPSHOT.jar to Nexus"
+		    withCredentials([usernamePassword(credentialsId: env.NEXUS_CREDENTIALS_ID, passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
+		        sh """
+		            curl -v -u ${NEXUS_USER}:${NEXUS_PASS} \
+		            --upload-file target/Foyer-0.0.1-SNAPSHOT.jar \
+		            "${env.NEXUS_URL}/repository/maven-releases/${env.NEXUS_GROUP_ID.replaceAll('\\.', '/')}/${env.NEXUS_ARTIFACT_ID}/${env.NEXUS_VERSION}/${env.NEXUS_ARTIFACT_ID}-${env.NEXUS_VERSION}.jar"
+		        """
+		    }
+		}
+	    }
+	}
+
 
        
 
