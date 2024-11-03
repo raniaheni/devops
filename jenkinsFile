@@ -19,18 +19,27 @@ pipeline {
             }
         }
        
-        stage('project clean & package') {
+        stage('project clean') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh 'mvn clean '
+            }
+        }
+        stage('project  package') {
+            steps {
+                sh 'mvn package -DskipTests '
             }
         }
 
-        
+        stage('Generate JaCoCo Report') {
+            steps {
+                sh 'mvn test jacoco:report'
+            }
+        }
+                
         
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                sh 'mvn test jacoco:report'
 
                      // Update existing sonar-project.properties
                     sh '''
