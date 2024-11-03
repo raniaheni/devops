@@ -25,7 +25,11 @@ pipeline {
             }
         }
 
-        
+        stage('Test and Generate Coverage') {
+            steps {
+                sh 'mvn test jacoco:report'
+            }
+        }
         
         stage('SonarQube Analysis') {
             steps {
