@@ -25,15 +25,13 @@ pipeline {
             }
         }
 
-        stage('Test and Generate Coverage') {
-            steps {
-                sh 'mvn test jacoco:report'
-            }
-        }
+        
         
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
+                sh 'mvn test jacoco:report'
+
                      // Update existing sonar-project.properties
                     sh '''
                     echo "sonar.projectKey=tn.esprit.spring:Foyer" >> sonar-project.properties
