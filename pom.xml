@@ -78,10 +78,6 @@
                     <execution>
                         <goals>
                             <goal>prepare-agent</goal>
-                                    <configuration>
-                                          <output>file</output>
-                                          <destFile>${project.build.directory}/jacoco.exec</destFile>
-                                    </configuration>
                         </goals>
                     </execution>
                     <execution>
