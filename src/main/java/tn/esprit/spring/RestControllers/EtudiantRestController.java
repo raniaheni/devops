@@ -9,6 +9,7 @@ import tn.esprit.spring.Services.Etudiant.IEtudiantService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200") 
 @RestController
 @RequestMapping("etudiant")
 @AllArgsConstructor

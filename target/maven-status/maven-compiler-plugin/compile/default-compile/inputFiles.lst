@@ -24,10 +24,8 @@
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/Services/Bloc/IBlocService.java
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/Services/Bloc/BlocService.java
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/DAO/Repositories/EtudiantRepository.java
-/home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/Config/SpringDocConfig.java
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/Services/Etudiant/EtudiantService.java
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/DAO/Entities/Universite.java
-/home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/AOP/FoyerAspect.java
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/Services/Reservation/IReservationService.java
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/DAO/Entities/Foyer.java
 /home/vagrant/Desktop/New Folder 1/devops/src/main/java/tn/esprit/spring/Schedular/Schedular.java

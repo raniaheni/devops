@@ -1,4 +1,3 @@
-# Utiliser une image de base Java
 FROM openjdk:17-jdk
 
 # Spécifier le répertoire de travail
@@ -12,4 +11,3 @@ EXPOSE 8082
 
 # Commande pour exécuter l'application
 CMD ["java", "-jar", "Foyer.jar"]
-

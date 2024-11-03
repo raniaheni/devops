@@ -15,7 +15,6 @@ tn/esprit/spring/DAO/Entities/Universite$UniversiteBuilder.class
 tn/esprit/spring/DAO/Entities/Chambre.class
 tn/esprit/spring/DAO/Entities/Foyer$FoyerBuilder.class
 tn/esprit/spring/RestControllers/ReservationRestController.class
-tn/esprit/spring/Config/SpringDocConfig.class
 tn/esprit/spring/Services/Universite/IUniversiteService.class
 tn/esprit/spring/DAO/Repositories/FoyerRepository.class
 tn/esprit/spring/Schedular/test.class
@@ -24,7 +23,6 @@ tn/esprit/spring/Services/Bloc/IBlocService.class
 tn/esprit/spring/RestControllers/FoyerRestController.class
 tn/esprit/spring/Services/Chambre/IChambreService.class
 tn/esprit/spring/Services/Chambre/ChambreService.class
-tn/esprit/spring/AOP/FoyerAspect.class
 tn/esprit/spring/RestControllers/BlocRestController.class
 tn/esprit/spring/Services/Universite/UniversiteService.class
 tn/esprit/spring/Services/Reservation/ReservationService$1.class

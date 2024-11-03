@@ -1,35 +1,41 @@
 version: '3.8'
 
 services:
-  mysql:
+  mysqldb:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: foyer1
+      MYSQL_DATABASE: foyer1  # Changer le nom de la base de données ici
     ports:
-      - "3308:3306"  # Expose MySQL on port 3308 of the host
+      - "3307:3306"  # Expose MySQL sur le port 3306 de l'hôte
     networks:
       - app-network
     volumes:
-      - mysql_data:/var/lib/mysql  # Persist MySQL data
+      - db:/var/lib/mysql  # Persister les données MySQL
 
-  springboot:
-    image: kaissgh11/foyer  # Image name for the Spring Boot application
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/foyer1?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 123
-    depends_on:
-      - mysql  # Ensure MySQL starts before Spring Boot
+  app-achat:
+    image: "kaissgh11/foyer:latest"  # Utiliser votre image Spring Boot
     ports:
-      - "8087:8082"  # Map internal port 8082 to external port 8087
+      - "8087:8082"  # Mapper le port interne 8082 au port externe 8087
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/foyer1?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root  # Assurez-vous que le mot de passe est correct
+      # Uncomment the following lines if needed
+      # - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      # - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5InnoDBDialect
+    restart: unless-stopped
+    depends_on:
+      - mysqldb  # Assurez-vous que le conteneur MySQL est démarré avant Spring Boot
+    stdin_open: true
+    tty: true
     networks:
       - app-network
 
   sonarqube:
     image: sonarqube:latest
     ports:
-      - "9001:9000"  # Expose SonarQube on port 9001 of the host
+      - "9001:9000"  # Expose SonarQube sur le port 9001 de l'hôte
     networks:
       - app-network
     volumes:
@@ -40,7 +46,7 @@ services:
   nexus:
     image: sonatype/nexus3
     ports:
-      - "8089:8081"  # Expose Nexus on port 8089 of the host
+      - "8089:8081"  # Expose Nexus sur le port 8089 de l'hôte
     networks:
       - app-network
     volumes:
@@ -48,12 +54,12 @@ services:
 
 networks:
   app-network:
-    external: true  # Use the pre-created external network
+    driver: bridge  # Utiliser un réseau de pont par défaut
 
 volumes:
-  mysql_data:  # Volume for persisting MySQL data
-  sonarqube_data:  # Volume for persisting SonarQube data
-  sonarqube_extensions:  # Volume for SonarQube extensions
-  sonarqube_logs:  # Volume for SonarQube logs
-  nexus_data:  # Volume for persisting Nexus data
+  db:  # Volume pour persister les données MySQL
+  sonarqube_data:  # Volume pour persister les données de SonarQube
+  sonarqube_extensions:  # Volume pour les extensions de SonarQube
+  sonarqube_logs:  # Volume pour les logs de SonarQube
+  nexus_data:  # Volume pour persister les données de Nexus
 
