@@ -30,11 +30,11 @@ pipeline {
             }
         }
 
-        stage('Generate JaCoCo Report') {
-            steps {
-                sh 'mvn test jacoco:report'
-            }
-        }
+         stage('Test & Jacoco Static Analysis') {
+        junit 'target/surefire-reports/**/*.xml'
+        jacoco()
+    }
+
                 
         
         stage('SonarQube Analysis') {
