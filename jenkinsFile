@@ -32,7 +32,7 @@ pipeline {
 
         stage('Generate JaCoCo Report') {
             steps {
-                sh 'mvn test jacoco:report'
+                sh 'mvn test jacoco:report -Dtest=tn.esprit.springTest.UniversiteServiceMockitoTest'
             }
         }
 
@@ -55,11 +55,7 @@ pipeline {
             }
         }
         
-        stage('Tests unitaires') {
-            steps {
-                sh 'mvn test -Dtest=tn.esprit.springTest.UniversiteServiceMockitoTest'
-            }
-        }
+       
         
         
         stage('Pull from Docker Hub') {
