@@ -1,16 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('welcome') {
-            steps {
-                echo 'hello'
-            }
-        }
-        stage('test maven') {
-            steps {
-                sh 'mvn -version'
-            }
-        }
+        
         
         stage('Checkout Git') {
             steps {
@@ -45,7 +36,12 @@ pipeline {
                 }
             }
         }
-        
+
+          stage('Deployment in Nexus') {
+            steps {
+                sh 'mvn deploy'
+            }
+        }
         
         stage('Pull from Docker Hub') {
             steps {
