@@ -57,6 +57,7 @@
     </dependencies>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -89,7 +90,17 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
+
+    <distributionManagement>
+
+        <snapshotRepository>
+            <id>deploymentRepo</id>
+            <url>http://192.168.33.10:8081/repository/5SAE1-G2-manelWalha/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 
 </project>
