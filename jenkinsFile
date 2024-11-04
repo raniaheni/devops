@@ -20,34 +20,11 @@ pipeline {
             }
         }
 
-        stage('Generate JaCoCo Report') {
+        stage('docker project image') {
             steps {
-                sh 'mvn test jacoco:report -Dtest=tn.esprit.springTest.UniversiteServiceMockitoTest'
+                sh 'docker build -t walhamanel/manelwalha-5sae1-g2 '
             }
         }
-
-                
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=tn.esprit.spring:Foyer -Dsonar.java.coveragePlugin=jacoco -Dsonar.jacoco.reportPaths=target/jacoco-report/jacoco.xml -Dsonar.java.binaries=target'
-                
-                }
-            }
-        }
-
-          stage('Deployment in Nexus') {
-            steps {
-                sh 'mvn deploy -DskipTests'
-            }
-        }
-        
-        stage('Pull from Docker Hub') {
-            steps {
-                sh "docker pull walhamanel/alpine:1.0.0"
-            }
-        }
-        
         
         
     }
