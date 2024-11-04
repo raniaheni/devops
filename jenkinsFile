@@ -46,12 +46,6 @@ pipeline {
             }
         }
         
-         stage('Deployment in Nexus') {
-            steps {
-                sh 'mvn clean deploy'
-            }
-        }
-        
         
         stage('Pull from Docker Hub') {
             steps {
