@@ -1,5 +1,5 @@
 FROM alpine
-RUN apk add openjdk11
+RUN apk add openjdk17
 EXPOSE 8080
 # Define environment variables
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \JAVA_OPTS=""
