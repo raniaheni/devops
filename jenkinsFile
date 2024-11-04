@@ -28,7 +28,7 @@ pipeline {
 
         stage('Pull from Docker Hub') {
             steps {
-                sh "docker pull walhamanel/manelwalha-5sae1-g2"
+                sh "docker push walhamanel/manelwalha-5sae1-g2"
             }
         }
         
