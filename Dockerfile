@@ -1,7 +1,6 @@
 FROM alpine
 RUN apk add openjdk11
 EXPOSE 8080
-LABEL ManelWalha-5SAE1-G2
 # Define environment variables
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \JAVA_OPTS=""
 # Set the working directory to /app
