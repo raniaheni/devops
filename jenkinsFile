@@ -26,9 +26,11 @@ pipeline {
             }
         }
 
-        stage('Pull from Docker Hub') {
+        stage('Push in Docker Hub') {
             steps {
-                sh "docker push walhamanel/manelwalha-5sae1-g2"
+                docker.withRegistry('https://index.docker.io/v1/', dockerKey) {
+                                sh "docker push walhamanel/manelwalha-5sae1-g2"
+                        }
             }
         }
         
