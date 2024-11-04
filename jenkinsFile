@@ -22,7 +22,7 @@ pipeline {
 
         stage('docker project image') {
             steps {
-                sh 'docker build -t walhamanel/manelwalha-5sae1-g2 '
+                sh 'docker build -t walhamanel/manelwalha-5sae1-g2 .'
             }
         }
         
