@@ -25,7 +25,12 @@ pipeline {
                 sh 'docker build -t walhamanel/manelwalha-5sae1-g2 .'
             }
         }
-        
+
+        stage('Pull from Docker Hub') {
+            steps {
+                sh "docker pull walhamanel/manelwalha-5sae1-g2"
+            }
+        }
         
     }
 }
