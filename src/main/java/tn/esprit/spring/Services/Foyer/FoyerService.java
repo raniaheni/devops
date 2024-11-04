@@ -13,9 +13,9 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class FoyerService implements IFoyerService {
-    FoyerRepository repo;
-    UniversiteRepository universiteRepository;
-    BlocRepository blocRepository;
+    private final FoyerRepository repo;
+    private final UniversiteRepository universiteRepository;
+    private final BlocRepository blocRepository;
 
     @Override
     public Foyer addOrUpdate(Foyer f) {
@@ -29,7 +29,7 @@ public class FoyerService implements IFoyerService {
 
     @Override
     public Foyer findById(long id) {
-        return repo.findById(id).get();
+        return repo.findById(id).orElse(null);
     }
 
     @Override
@@ -37,46 +37,42 @@ public class FoyerService implements IFoyerService {
         repo.deleteById(id);
     }
 
-    @Override
+    /*@Override
     public void delete(Foyer f) {
-        repo.delete(f);
-    }
+        repo.delete(f); // Supprime le foyer
+    }*/
 
     @Override
     public Universite affecterFoyerAUniversite(long idFoyer, String nomUniversite) {
-        Foyer f = findById(idFoyer); // Child
-        Universite u = universiteRepository.findByNomUniversite(nomUniversite); // Parent
-        // On affecte le child au parent
+        Foyer f = findById(idFoyer);
+        Universite u = universiteRepository.findByNomUniversite(nomUniversite);
         u.setFoyer(f);
         return universiteRepository.save(u);
     }
 
     @Override
     public Universite desaffecterFoyerAUniversite(long idUniversite) {
-        Universite u = universiteRepository.findById(idUniversite).get(); // Parent
-        u.setFoyer(null);
-        return universiteRepository.save(u);
+        Universite u = universiteRepository.findById(idUniversite).orElse(null);
+        if (u != null) {
+            u.setFoyer(null);
+            return universiteRepository.save(u);
+        }
+        return null; // Renvoie null si l'université n'est pas trouvée
     }
 
     @Override
     public Foyer ajouterFoyerEtAffecterAUniversite(Foyer foyer, long idUniversite) {
-        // Récuperer la liste des blocs avant de faire l'ajout
-        List<Bloc> blocs = foyer.getBlocs();
-        // Foyer est le child et universite est parent
-        Foyer f = repo.save(foyer);
-        Universite u = universiteRepository.findById(idUniversite).get();
-        // Foyer est le child et bloc est le parent
-        //On affecte le child au parent
-        for (Bloc bloc : blocs) {
-            bloc.setFoyer(foyer);
-            blocRepository.save(bloc);
+        Foyer savedFoyer = repo.save(foyer);
+        Universite u = universiteRepository.findById(idUniversite).orElse(null);
+        if (u != null) {
+            u.setFoyer(savedFoyer);
+            universiteRepository.save(u);
         }
-        u.setFoyer(f);
-        return universiteRepository.save(u).getFoyer();
+        return savedFoyer;
     }
 
-    @Override
-    public Foyer ajoutFoyerEtBlocs(Foyer foyer) {
+   // @Override
+    /*public Foyer ajoutFoyerEtBlocs(Foyer foyer) {
         //Foyer child / Bloc parent
         //Objet foyer = attribut objet foyer + les blocs associés
 //        Foyer f = repo.save(foyer);
@@ -93,6 +89,6 @@ public class FoyerService implements IFoyerService {
             blocRepository.save(b);
         }
         return foyer;
-    }
+    }*/
 
 }

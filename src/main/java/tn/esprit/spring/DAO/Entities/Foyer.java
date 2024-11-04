@@ -22,8 +22,10 @@ public class Foyer implements Serializable {
     long idFoyer;
     String nomFoyer;
     long capaciteFoyer;
-    @OneToOne(mappedBy = "foyer")
+
+    @OneToOne(mappedBy = "foyer", cascade = CascadeType.ALL)
     Universite universite;
-    @OneToMany(mappedBy = "foyer")
-    List<Bloc> blocs= new ArrayList<>();
+
+    @OneToMany(mappedBy = "foyer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Bloc> blocs = new ArrayList<>();
 }

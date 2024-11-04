@@ -1,5 +1,6 @@
 package tn.esprit.spring.DAO.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +22,7 @@ public class Universite implements Serializable {
     String nomUniversite;
     String adresse;
     @OneToOne(cascade = CascadeType.ALL) //ajout, Modif et supprim
+    @JsonIgnore
     Foyer foyer;
 
 }

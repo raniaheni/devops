@@ -16,14 +16,14 @@ public interface IFoyerService {
 
     void deleteById(long id);
 
-    void delete(Foyer f);
+    //void delete(Foyer f);
 
     Universite affecterFoyerAUniversite(long idFoyer, String nomUniversite);
 
     Universite desaffecterFoyerAUniversite(long idUniversite);
 
     Foyer ajouterFoyerEtAffecterAUniversite (Foyer foyer, long idUniversite); // Universite: Parent / Foyer:Child
-    Foyer ajoutFoyerEtBlocs(Foyer foyer);
+    //Foyer ajoutFoyerEtBlocs(Foyer foyer);
 
 
 }
