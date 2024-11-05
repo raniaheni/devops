@@ -18,10 +18,19 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        sh 'docker compose up'
+                        sh 'docker compose up -d'
                     }          
                 }
         }
+        stage('Verify Containers') {
+            steps {
+                script {
+                    // List running containers to confirm both `spring` and `mysql` are active
+                    sh 'docker ps '
+                }
+    }
+}
+
 
         }
     
