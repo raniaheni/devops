@@ -9,6 +9,7 @@ services:
   mysql:
     image: walhamanel/mysql_image
     environment:
+      MYSQL_ROOT_HOST: '%'  
       MYSQL_ROOT_PASSWORD: admin
     ports:
       - "3306:3306"
