@@ -16,7 +16,7 @@ services:
   app-achat:
     image: "kaissgh11/foyer:latest"  # Utiliser votre image Spring Boot
     ports:
-      - "8087:8082"  # Mapper le port interne 8082 au port externe 8087
+      - "8088:8082"  # Mapper le port interne 8082 au port externe 8087
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/foyer1?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
