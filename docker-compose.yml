@@ -11,6 +11,7 @@ services:
   mysql:
     image: walhamanel/mysql_image
     environment:
+      - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=admin2
       - MYSQL_ROOT_HOST='%'  
