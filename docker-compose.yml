@@ -4,6 +4,8 @@ services:
     image: walhamanel/manelwalha-5sae1-g2
     ports:
       - "9002:9002"
+    depends_on:
+      - mysql  
   mysql:
     image: walhamanel/mysql_image
     environment:
