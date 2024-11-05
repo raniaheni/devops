@@ -16,7 +16,7 @@ services:
   spring:
     image: walhamanel/manelwalha-5sae1-g2
     ports:
-      - "8081:8081"
+      - "8080:9002"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/foyer?createDatabaseIfNotExist=true
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
