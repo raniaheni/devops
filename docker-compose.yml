@@ -1,0 +1,12 @@
+version: '2'
+services:
+  spring:
+    image: walhamanel/manelwalha-5sae1-g2
+    ports:
+      - "9002:9002"
+  mysql:
+    image: walhamanel/mysql_image
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3306:3306"
