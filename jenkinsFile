@@ -17,8 +17,11 @@ pipeline {
         stage('Run docker composer') {
             steps {
                 
-                sh 'docker compose up'
-            }
+                    script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                        echo 'Starting Docker Compose...'
+                        sh 'docker compose up'
+                    }            }
         }
 
         
