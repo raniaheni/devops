@@ -9,7 +9,9 @@ services:
   mysql:
     image: walhamanel/mysql_image
     environment:
-      MYSQL_ROOT_HOST: '%'  
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin2
+      - MYSQL_ROOT_HOST: '%'  
     ports:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
