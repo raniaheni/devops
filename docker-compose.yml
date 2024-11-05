@@ -1,18 +1,5 @@
 version: '2'
 services:
-  spring:
-    image: walhamanel/manelwalha-5sae1-g2
-    ports:
-      - "9002:9002"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/foyer?createDatabaseIfNotExist=true
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin2
-    depends_on:
-      - mysql  
-    networks:
-      - custom_network
   mysql:
     image: walhamanel/mysql_image
     environment:
@@ -25,6 +12,21 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - custom_network
+      
+  spring:
+    image: walhamanel/manelwalha-5sae1-g2
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/foyer?createDatabaseIfNotExist=true
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin2
+    depends_on:
+      - mysql  
+    networks:
+      - custom_network
+  
 networks:
   custom_network:
     driver: bridge
