@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: foyer1  # Changer le nom de la base de données ici
+    ports:
+      - "3307:3306"  # Expose MySQL sur le port 3306 de l'hôte
+    networks:
+      - app-network
+    volumes:
+      - db:/var/lib/mysql  # Persister les données MySQL
+
+  app-achat:
+    image: "brahiim/foyer:latest"  # Utiliser votre image Spring Boot
+    ports:
+      - "8087:8082"  # Mapper le port interne 8082 au port externe 8087
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/foyer1?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root  # Assurez-vous que le mot de passe est correct
+      # Uncomment the following lines if needed
+      # - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      # - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5InnoDBDialect
+    restart: unless-stopped
+    depends_on:
+      - mysqldb  # Assurez-vous que le conteneur MySQL est démarré avant Spring Boot
+    stdin_open: true
+    tty: true
+    networks:
+      - app-network
+
+  sonarqube:
+    image: sonarqube:latest
+    ports:
+      - "9001:9000"  # Expose SonarQube sur le port 9001 de l'hôte
+    networks:
+      - app-network
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+
+networks:
+  app-network:
+    driver: bridge  # Utiliser un réseau de pont par défaut
+
+volumes:
+  db:  # Volume pour persister les données MySQL
+  sonarqube_data:  # Volume pour persister les données de SonarQube
+  sonarqube_extensions:  # Volume pour les extensions de SonarQube
+  sonarqube_logs:  # Volume pour les logs de SonarQube
+  nexus_data:  # Volume pour persister les données de Nexus
