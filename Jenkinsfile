@@ -85,6 +85,15 @@ pipeline {
 		}
 	    }
 	}
+	
+	stage('Deploy docker') {
+            steps {
+                script {
+                    echo 'Starting the application container...'
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
 
 
         stage('Start Services with Docker Compose') {

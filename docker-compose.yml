@@ -20,7 +20,7 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/foyer1?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root  # Assurez-vous que le mot de passe est correct
+      - SPRING_DATASOURCE_PASSWORD=123  # Assurez-vous que le mot de passe est correct
       # Uncomment the following lines if needed
       # - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       # - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5InnoDBDialect
