@@ -18,18 +18,12 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        sh 'docker compose up -d'
+                        sh 'docker compose up '
                     }          
                 }
         }
 }
-        stage('Verify Containers') {
-            steps {
-               
-                    sh 'docker ps '
-        }
-    }
-
+      
 
         
     
