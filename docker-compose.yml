@@ -6,6 +6,8 @@ services:
       - "9002:9002"
     depends_on:
       - mysql  
+    networks:
+      - app-network
   mysql:
     image: walhamanel/mysql_image
     environment:
@@ -15,3 +17,8 @@ services:
     ports:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
