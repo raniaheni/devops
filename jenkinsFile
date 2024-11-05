@@ -66,6 +66,7 @@ pipeline {
                     }
                 }
             }
+    }
 
         stage('Run docker composer') {
             steps {
