@@ -58,6 +58,7 @@ pipeline {
                     }
                 }
             }
+        }
         stage('Pull mysql image from Docker Hub') {
             steps {
                 script {
