@@ -22,17 +22,16 @@ pipeline {
                     }          
                 }
         }
+}
         stage('Verify Containers') {
             steps {
-                script {
-                    // List running containers to confirm both `spring` and `mysql` are active
+               
                     sh 'docker ps '
-                }
-    }
-}
-
-
         }
+    }
+
+
+        
     
 }
 }
