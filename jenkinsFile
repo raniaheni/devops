@@ -44,6 +44,21 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t walhamanel/manelwalha-5sae1-g2 .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                        sh 'docker push walhamanel/manelwalha-5sae1-g2'
+                    }
+                }
+            }
+        }
         
         stage('Pull mysql image from Docker Hub') {
             steps {
