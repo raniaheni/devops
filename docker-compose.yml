@@ -1,0 +1,24 @@
+version: "3"
+services:
+  springboot-app:
+    container_name: backend_springboot-app
+    image: ibra1999/foyer_ibra:latest
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://foyerdb:3306/test?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - foyerdb
+
+  foyerdb:
+    container_name: mysqldb
+    image: mysql
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: root
